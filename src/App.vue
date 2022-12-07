@@ -1,16 +1,42 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h1>Departament's monthly expense</h1>
+  <ul>
+    <button>+</button>
+    <li v-for="manager in managers" :key="manager.id">
+      <!-- <input type="checkbox" v-model="manager.done"> -->
+      <span >{{ manager.name }} </span>
+      <button>X </button>
+    </li>
+  </ul>
+
+  
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+var id = 0
 export default {
+
+  data() {
+    return {
+      
+      managers: [
+        {parent: null, id: id, name: "Manager A", devloper: true, qa_tester: true },
+        {parent: id, id: id++, name: "Manager B", devloper: true, qa_tester: true },
+      ],
+    }
+  },
+  
   name: 'App',
   components: {
-    HelloWorld
-  }
+  },
+
+  computed: {
+    filteredmanagers() {
+      return this.hideCompleted
+        ? this.managers.filter((t) => !t.done)
+        : this.managers
+    }
+  },
 }
 </script>
 
@@ -19,7 +45,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
   margin-top: 60px;
 }
