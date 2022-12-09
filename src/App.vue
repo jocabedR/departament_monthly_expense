@@ -3,7 +3,8 @@
   <ul>
     <li v-for="manager in managers" :key="manager.id">
       <span>{{ manager.name }}: ${{manager_cost}}</span>
-      <button @click="addChild(manager.id)">+</button>
+      <button @click="addChild(manager.id)">Add a manager</button>
+      <button v-if="(manager.id !=0 )" @click="deleteManager(manager.id)">Delete manager</button>
       <ul>
         <li>
           <span :class="manager.devloper ? 'with' : 'witout'">Developver: ${{developver_cost}}</span>
@@ -71,6 +72,12 @@ export default {
       this.id ++
       this.managers.push({id: this.id, parent: parent_id, name: "Manager "+this.id, devloper: true, qa_tester: true})
     },
+
+    deleteManager(manager_id){
+      let descendants_ids = [...[manager_id], ...this.getDescendants([manager_id])]
+
+      this.managers =this.managers.filter(manager => !descendants_ids.includes(manager.id))
+    }
     
   }
 }
