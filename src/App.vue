@@ -14,10 +14,10 @@ export default {
         id: 0,
         name: "Manager 0",
         developers: [
-          {name: "JocaDev"}
+          {id:0, name: "JocaDev"}
         ],
         qa_testers: [
-          {name: "JocaTest"}
+          {id:0, name: "JocaTest"}
         ],
         children : []
       },

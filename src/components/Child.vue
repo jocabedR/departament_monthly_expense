@@ -5,15 +5,37 @@
     <button @click="addDeveloper">+D</button>
     <button @click="addQATester">+QA</button>
     <button @click="deleteManager(model.id)">-</button>
+
   </div>
   <ul>
-    <li v-for="developer in model.developers">
+    <!-- <li v-for="developer in model.developers">
       <span>{{developer.name}} : $1,000.00</span>
       <button @click="deleteDeveloper(developer.id)">-</button>
     </li>
     <li v-for="qa_tester in model.qa_testers">
       <span>{{qa_tester.name}} : $500.00</span>
       <button @click="deleteQATester(qa_tester.id)">-</button>
+    </li> -->
+
+    <li>
+      <span>{{model.developers.length}} Developer(s) : $1,000.00 each</span>
+      <button @click="toggleDevelopers">[{{ developersOpen ? '-' : '+' }}]</button>
+      <ul v-if="developersOpen">
+        <li v-for="developer in model.developers">
+          <span>{{developer.name}} : $1,000.00</span>
+          <button @click="deleteDeveloper(developer.id)">-</button>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <span>{{model.qa_testers.length}} QA Tester(s) : $500.00 each</span>
+      <button @click="toggleQATesters">[{{ qa_testersOpen ? '-' : '+' }}]</button>
+      <ul v-if="qa_testersOpen">
+        <li v-for="qa_tester in model.qa_testers">
+          <span>{{qa_tester.name}} : $500.00</span>
+          <button @click="deleteQATester(qa_tester.id)">-</button>
+        </li>
+      </ul>
     </li>
     
     <Child 
@@ -55,11 +77,12 @@ export default {
   data() {
     return { 
       id: 0,
-      idDeveloper: 0,
-      idQaTester : 0,
       lastMove: 0,
       changes: 0,
       acumulate: 0,
+      developersOpen : false,
+      qa_testersOpen : false,
+      childrenOpen : false,
     }
   },
 
@@ -68,10 +91,13 @@ export default {
   },
 
   computed: {
-
     calculateLocalTotal(){
      return  (((this.model.children.length +1)*300) + (this.model.developers.length * 1000) + (this.model.qa_testers.length * 500))
     },
+
+    isFolder() {
+      return this.model.children && this.model.children.length
+    }
     
   },
 
@@ -104,16 +130,18 @@ export default {
     },
 
     addDeveloper() {
-      this.idDeveloper++
+      this.id++
       this.model.developers.push({
+        id: this.id,
         name: "Developer"
       })
       this.changes = 1000
     },
 
     addQATester () {
-      this.idQaTester++
+      this.id++
       this.model.qa_testers.push({
+        id: this.id,
         name: "QA Tester"
       })
       this.changes = 500
@@ -126,12 +154,12 @@ export default {
 
       this.changes = -300
 
-      //console.log(this.model)
-
     },
-    
 
     deleteDeveloper(developer_id){
+
+      //console.log(developer_id)
+
       let result = this.model.developers.filter(developer => developer.id != developer_id)
       this.model.developers = result
       this.changes = -1000
@@ -141,6 +169,14 @@ export default {
       let result = this.model.qa_testers.filter(qa_tester => qa_tester.id != qa_tester_id)
       this.model.qa_testers = result
       this.changes = -500
+    },
+
+    toggleDevelopers() {
+      this.developersOpen = !this.developersOpen
+    },
+
+    toggleQATesters() {
+      this.qa_testersOpen = !this.qa_testersOpen
     },
   }
 }
