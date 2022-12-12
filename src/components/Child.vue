@@ -4,29 +4,34 @@
     <button @click="addChild">+M</button>
     <button @click="addDeveloper">+D</button>
     <button @click="addQATester">+QA</button>
-    <button v-if="(model.id !=0 )" @click="deleteManager(model.id)">Delete manager</button>
+    <button @click="deleteManager(model.id)">-</button>
   </div>
   <ul>
     <li v-for="developer in model.developers">
       <span>{{developer.name}} : $1,000.00</span>
-      <button>-</button>
+      <button @click="deleteDeveloper(developer.id)">-</button>
     </li>
     <li v-for="qa_tester in model.qa_testers">
       <span>{{qa_tester.name}} : $500.00</span>
+      <button @click="deleteQATester(qa_tester.id)">-</button>
     </li>
     
     <Child 
       v-for="child in model.children" 
       :model="child" 
-      @updatedChild="(change) => changes += change"
+      @updatedChild="(change) => acumulate += change"
     />
 
-    <li v-if="model.children.length > 0" >
-      <Total :total="changes"/>
+    <!-- <li v-if="model.children.length > 0" >
+      Local:<Total :total="calculateLocalTotal"/>
+      <br/>
+      Changes:<Total :total="acumulate"/>
+      <br/>
+      TotalTotal <Total :total="acumulate + calculateLocalTotal"/>
     </li>
     <li v-else>
       <Total :total="calculateLocalTotal"/>
-    </li>
+    </li> -->
   </ul>
 </template>
 
@@ -54,7 +59,7 @@ export default {
       idQaTester : 0,
       lastMove: 0,
       changes: 0,
-      acumulateChanges: 0,
+      acumulate: 0,
     }
   },
 
@@ -65,7 +70,7 @@ export default {
   computed: {
 
     calculateLocalTotal(){
-     return  (300 + (this.model.developers.length * 1000) + (this.model.qa_testers.length * 500))
+     return  (((this.model.children.length +1)*300) + (this.model.developers.length * 1000) + (this.model.qa_testers.length * 500))
     },
     
   },
@@ -88,14 +93,14 @@ export default {
       this.id++
       this.model.children.push({
         id: this.id,
-        name: "Manager "+this.model.id+this.id, 
+        name: "Manager", 
         developer: 1, 
         qa_tester: 1, 
         developers: [], 
         qa_testers: [], 
         children : []
       })
-      this.changes += 300
+      this.changes = 300
     },
 
     addDeveloper() {
@@ -103,7 +108,7 @@ export default {
       this.model.developers.push({
         name: "Developer"
       })
-      this.changes += 1000
+      this.changes = 1000
     },
 
     addQATester () {
@@ -111,16 +116,32 @@ export default {
       this.model.qa_testers.push({
         name: "QA Tester"
       })
-      this.changes += 500
+      this.changes = 500
     },
 
     deleteManager(manager_id){
-      let descendants_ids = [...[manager_id], ...this.getDescendants([manager_id])]
-      console.log(descendants_ids)
-      let result = this.model.filter(manager => !descendants_ids.includes(manager.id))
-      this.model = result
+
+      let result = this.$parent.model.children.filter(manager => manager.id != manager_id)
+      this.$parent.model.children = result
+
+      this.changes = -300
+
+      //console.log(this.model)
+
     },
     
+
+    deleteDeveloper(developer_id){
+      let result = this.model.developers.filter(developer => developer.id != developer_id)
+      this.model.developers = result
+      this.changes = -1000
+    },
+
+    deleteQATester(qa_tester_id){
+      let result = this.model.qa_testers.filter(qa_tester => qa_tester.id != qa_tester_id)
+      this.model.qa_testers = result
+      this.changes = -500
+    },
   }
 }
 </script>
