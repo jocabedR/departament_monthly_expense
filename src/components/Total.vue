@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-   <span>Total: ${{total}}</span>
+   <span>Total: ${{total}}.00</span>
 </template>
 
 <style>

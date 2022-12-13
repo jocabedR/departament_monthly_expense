@@ -1,6 +1,6 @@
 <template>
   <h1>Departament's monthly expense</h1>
-  <Child :model="model"/>  
+  <Child :model="model" :managers="managers"/>  
 </template>
 
 <script>
@@ -19,8 +19,15 @@ export default {
         qa_testers: [
           {id:0, name: "JocaTest"}
         ],
-        children : []
+        children : [],
+        total: 1800
       },
+      managers: [
+        {id: 0, 
+        parent: null, 
+        developers: 1, 
+        qa_testers: 1},
+      ],
     }
   },
   
