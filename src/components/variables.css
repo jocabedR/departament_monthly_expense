@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Akshar&display=swap");
+
+:root{
+    --blue: #122e54;
+    --dark-blue: #0a1a32;
+    --green:#bfc328;
+    --green-hover: #959920;
+    --gray:#cbd1db;
+    --normal-font: Arial, sans-serif;
+    --special-font: 'Akshar', sans-serif;
+    --space-unit: 0.75em;
+}

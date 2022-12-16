@@ -1,0 +1,58 @@
+@import './variables.css';
+
+*{
+  font-family: var(--normal-font);
+  color: white;
+}
+
+h1, h2, h3 {
+  font-family: var(--special-font);
+}
+
+button {
+  margin: 0.25em 0.25em 0.25em 0.25em;
+  padding: 0.1em;
+  font-weight: bold;
+  font-size: large;
+  background-color: var(--green);
+  border: 0mm;
+  border-radius: 0.25em;
+  color: var(--blue);
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--green-hover);
+}
+
+ul {
+  list-style-type: none;
+  padding-inline-start: var(--space-unit);
+  padding: 0.5em;
+}
+
+#child {
+  padding: 1em;
+  z-index: 1; 
+  overflow-x: scroll;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 0.75em;
+  padding: 0.5em;
+  min-width: 10em;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+  
+::-webkit-scrollbar-track {
+  background: #f1f1f17c;
+}
+  
+::-webkit-scrollbar-thumb {
+  background: rgba(200, 200, 200, 0.5);
+}
+  
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(85, 85, 85, 0.47);
+}

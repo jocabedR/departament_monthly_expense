@@ -1,49 +1,49 @@
 <template>
   <ul>
-    <div>
+    <div id="geneal-information">
       {{ model.name }}: $300.00
-      <button @click="addChild" title="Add Manager">+👷</button>
-      <button @click="addDeveloper" title="Add Developer">+👨‍💻</button>
-      <button @click="addQATester" title="Add QA Tester">+🧐</button>
-      <button @click="deleteManager(model.id)" title="Delete Manager" v-if="model.id != 0">🗑️</button>
+      <button @click="deleteManager(model.id)" title="Delete Manager" v-if="model.id != 0"> - </button>
+      <Total :total="calculateTotal"/>
     </div>
 
-    <li>
-      <span @click="toggleDevelopers">[{{ developersOpen ? '-' : '+' }}] </span>
+   <li id="list">
+      <button @click="toggleDevelopers"> {{ developersOpen ? '«' : '»' }} </button>
       <span>{{model.developers.length}} Developer(s)</span>
+      <button @click="addDeveloper" title="Add Developer"> + </button>
       <ul v-if="developersOpen">
-        <li v-for="developer in model.developers">
+        <li v-for="developer in model.developers" :key="developer.id">
           <span>{{developer.name}} : $1,000.00</span>
-          <button @click="deleteDeveloper(developer.id)" title="Delete Developer">🗑️</button>
+          <button @click="deleteDeveloper(developer.id)" title="Delete Developer"> - </button>
         </li>
       </ul>
     </li>
 
     <li>
-      <span @click="toggleQATesters">[{{ qa_testersOpen ? '-' : '+' }}] </span>
+      <button @click="toggleQATesters"> {{ qa_testersOpen ? '«' : '»' }} </button>
       <span>{{model.qa_testers.length}} QA Tester(s)</span>
+      <button @click="addQATester" title="Add QA Tester"> + </button>
       <ul v-if="qa_testersOpen">
-        <li v-for="qa_tester in model.qa_testers">
+        <li v-for="qa_tester in model.qa_testers" :key="qa_tester.id">
           <span>{{qa_tester.name}} : $500.00</span>
-          <button @click="deleteQATester(qa_tester.id)" title="Delete QA Tester">🗑️</button>
+          <button @click="deleteQATester(qa_tester.id)" title="Delete QA Tester"> - </button>
         </li>
       </ul>
     </li>
 
     <li>
-      <span @click="toggleChildren">[{{ childrenOpen ? '-' : '+' }}] </span>
+      <button @click="toggleChildren"> {{ childrenOpen ? '«' : '»' }} </button>
       <span>{{model.children.length}} Manager(s)</span>
+      <button @click="addChild" title="Add Manager"> + </button>
       <ul v-if="childrenOpen">
         <Child 
-          v-for="child in model.children" 
+          v-for="child in model.children"
+          :key="child.id"
           :model="child" 
-          :managers="this.auxiliar" 
-          
+          :managers="this.auxiliar"
+          id="child" 
         />
       </ul>
     </li>
-
-    <Total :total="calculateTotal"/>
   </ul>
 </template>
 
@@ -63,7 +63,7 @@ export default {
     }
   },
 
-  created(){
+  created() {
     this.auxiliar = this.managers
   },
 
@@ -76,7 +76,7 @@ export default {
       acumulate: 0,
       developersOpen : false,
       qa_testersOpen : false,
-      childrenOpen : false,
+      childrenOpen : true,
       auxiliar: [],
       total: 1800
     }
@@ -113,7 +113,7 @@ export default {
       let id = this.auxiliar.length
       this.model.children.push({
         id: id,
-        name: "Manager", 
+        name: "Manager "+id, 
         developer: 1, 
         qa_tester: 1, 
         developers: [], 
@@ -128,7 +128,7 @@ export default {
       this.idDeveloper++
       this.model.developers.push({
         id: this.idDeveloper,
-        name: "Developer"
+        name: "Developer "+this.model.id+"."+this.idDeveloper
       })
       
       this.auxiliar[this.model.id].developers++
@@ -138,7 +138,7 @@ export default {
       this.idQATester++
       this.model.qa_testers.push({
         id: this.idQATester,
-        name: "QA Tester"
+        name: "QA Tester "+this.model.id+"."+this.idQATester
       })
       
       this.auxiliar[this.model.id].qa_testers++
@@ -192,20 +192,19 @@ export default {
 </script>
 
 <style>
-  ul{
-    list-style-type: none;
-  }
+@import './styles.css';
 
-  button {
-    margin: 0.25em;
-    padding: 0.5em;
-    font-size: x-large;
-    font-weight: bold;
-    background-color: rgb(53, 154, 223);
-    border: 0mm;
-  }
+body {
+  overflow-x: scroll;
+  background-color: rgb(255, 255, 255);
+}
 
-  button:hover {
-    background-color: rgb(79, 175, 80);
-  }
+#general-information {
+  margin: 0.75em, 0;
+}
+
+#list {
+  margin-top: 0.5em;;
+}
+
 </style>
